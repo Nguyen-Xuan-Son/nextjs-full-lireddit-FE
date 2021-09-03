@@ -4,31 +4,31 @@ import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 
 import InputField from "@/components/common/InputField";
-import { useRegisterUserMutation } from "@/generated/graphql";
+import { useLoginMutation } from "@/generated/graphql";
 import { toErrorMap } from "@/utils/toErrorMap";
-import { validateForm } from "@/pages/register/validate";
+import { validateForm } from "@/pages/login/validate";
 
-const RegisterPage = () => {
-  const [, registerUser] = useRegisterUserMutation();
+const LoginPage = () => {
+  const [, login] = useLoginMutation();
   const router = useRouter();
 
-  const redirectToLogin = () => {
-    router.push("/login");
+  const redirectToRegister = () => {
+    router.push("/register");
   };
 
   return (
     <Box w="40%" p={4} margin="auto" h="100vh">
       <Heading color="green.500" mb={4}>
-        Register
+        Login
       </Heading>
       <Formik
         validationSchema={validateForm}
-        initialValues={{ username: "", password: "", rePassword: "" }}
+        initialValues={{ username: "", password: "" }}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
-          const user = await registerUser(values);
+          const user = await login(values);
           setSubmitting(false);
-          if (user.data?.registerUser.errors) {
-            setErrors(toErrorMap(user.data.registerUser.errors));
+          if (user.data?.login.errors) {
+            setErrors(toErrorMap(user.data.login.errors));
             return;
           }
           router.push("/");
@@ -36,7 +36,7 @@ const RegisterPage = () => {
       >
         {(props) => {
           const {
-            values: { username, password, rePassword },
+            values: { username, password },
             isValid,
             isSubmitting,
           } = props;
@@ -56,13 +56,6 @@ const RegisterPage = () => {
                 placeholder="Enter Password"
                 value={password}
               />
-              <InputField
-                name="rePassword"
-                type="password"
-                label="Re-password"
-                placeholder="Enter Re-password"
-                value={rePassword}
-              />
               <Button
                 mt={4}
                 colorScheme="teal"
@@ -70,10 +63,10 @@ const RegisterPage = () => {
                 type="submit"
                 disabled={!isValid}
               >
-                Register
+                Login
               </Button>
-              <Link onClick={redirectToLogin} p={4} ml={10}>
-                You have an account!
+              <Link ml={10} onClick={redirectToRegister}>
+                You have no account? Register now!
               </Link>
             </Form>
           );
@@ -83,4 +76,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;
