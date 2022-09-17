@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import InputField from "@/components/common/InputField";
 import { useRegisterUserMutation } from "@/generated/graphql";
-import { toErrorMap } from "@/utils/toErrorMap";
+import { toErrorMap } from "@/utils/functions/toErrorMap";
 import { validateForm } from "@/pages/register/validate";
 
 const RegisterPage = () => {
